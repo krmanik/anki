@@ -33,6 +33,13 @@ pub fn node_archive(platform: Platform) -> OnlineArchive {
             url: "https://nodejs.org/dist/v18.12.1/node-v18.12.1-win-x64.zip",
             sha256: "5478a5a2dce2803ae22327a9f8ae8494c1dec4a4beca5bbf897027380aecf4c7",
         },
+        // dummy url, build used from NODE_BINARY
+        Platform::AndroidAarch64 | Platform::AndroidArm | Platform::Androidi68 | Platform::AndroidX64 => {
+            OnlineArchive {
+                url: "https://nodejs.org/dist/v18.12.1/node-v18.12.1-linux-arm64.tar.xz",
+                sha256: "3904869935b7ecc51130b4b86486d2356539a174d11c9181180cab649f32cd2a",
+            }
+        }        
     }
 }
 
@@ -112,6 +119,20 @@ pub fn setup_node(
             "npm" => vec![if cfg!(windows) { "npm.cmd " } else { "bin/npm" }]
         },
     )?;
+    let node_binary = match std::env::var("NODE_BINARY") {
+        Ok(path) => {
+            assert!(
+                Utf8Path::new(&path).is_absolute(),
+                "NODE_BINARY must be absolute"
+            );
+            path.into()
+        }
+        Err(_) => {
+            inputs![":extract:node:bin"]
+        }
+    };
+    let node_binary = build.expand_inputs(node_binary);
+    build.variable("node_binary", &node_binary[0]);
     build.add("yarn", YarnSetup {})?;
 
     for binary in binary_exports {
@@ -146,7 +167,7 @@ impl BuildAction for EsbuildScript<'_> {
     }
 
     fn files(&mut self, build: &mut impl build::FilesHandle) {
-        build.add_inputs("node_bin", inputs![":extract:node:bin"]);
+        build.add_inputs("node_bin", inputs!["$node_binary"]);
         build.add_inputs("script", &self.script);
         build.add_inputs("entrypoint", &self.entrypoint);
         build.add_inputs("", inputs!["yarn.lock", ":node_modules", &self.deps]);

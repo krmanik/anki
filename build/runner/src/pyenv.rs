@@ -30,6 +30,7 @@ pub fn setup_pyenv(args: PyenvArgs) {
         run_silent(
             Command::new(&args.python_bin)
                 .args(["-m", "venv"])
+                .args(["--system-site-packages"])
                 .args(args.venv_args)
                 .arg(pyenv_folder),
         );

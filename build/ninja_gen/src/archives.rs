@@ -26,6 +26,10 @@ pub enum Platform {
     MacX64,
     MacArm,
     WindowsX64,
+    AndroidAarch64,
+    AndroidArm,
+    Androidi68,
+    AndroidX64,
 }
 
 impl Platform {
@@ -40,6 +44,10 @@ impl Platform {
                 ("linux", "aarch64") => Self::LinuxArm,
                 ("macos", "x86_64") => Self::MacX64,
                 ("macos", "aarch64") => Self::MacArm,
+                ("android", "aarch64") => Self::AndroidAarch64,
+                ("android", "arm") => Self::AndroidArm,
+                ("android", "i686") => Self::Androidi68,
+                ("android", "x86_64") => Self::AndroidX64,
                 _ => panic!("unsupported os/arch {os} {arch} - PR welcome!"),
             }
         }

@@ -37,6 +37,13 @@ pub fn protoc_archive(platform: Platform) -> OnlineArchive {
                 sha256: "3657053024faa439ff5f8c1dd2ee06bac0f9b9a3d660e99944f015a7451e87ec",
             }
         }
+        // dummy url, build used from PROTOC_BINARY
+        Platform::AndroidAarch64 | Platform::AndroidArm | Platform::Androidi68 | Platform::AndroidX64 => {
+            OnlineArchive {
+                url: "https://github.com/protocolbuffers/protobuf/releases/download/v21.8/protoc-21.8-linux-aarch_64.zip",
+                sha256: "f3d8eb5839d6186392d8c7b54fbeabbb6fcdd90618a500b77cb2e24faa245cad",
+            }
+        }
     }
 }
 
@@ -65,6 +72,13 @@ fn clang_format_archive(platform: Platform) -> OnlineArchive {
             OnlineArchive {
                 url: "https://github.com/ankitects/clang-format-binaries/releases/download/anki-2021-01-09/clang-format_windows_x86_64.zip",
                 sha256: "7d9f6915e3f0fb72407830f0fc37141308d2e6915daba72987a52f309fbeaccc",
+            }
+        }
+        // dummy url
+        Platform::AndroidAarch64 | Platform::AndroidArm | Platform::Androidi68 | Platform::AndroidX64 => {
+            OnlineArchive {
+                url: "https://github.com/ankitects/clang-format-binaries/releases/download/anki-2021-01-09/clang-format_linux_x86_64.zip",
+                sha256: "64060bc4dbca30d0d96aab9344e2783008b16e1cae019a2532f1126ca5ec5449",
             }
         }
     }

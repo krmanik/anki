@@ -72,7 +72,7 @@ fn build_rsbridge(build: &mut Build) -> Result<()> {
         CargoBuild {
             inputs: inputs![
                 glob!["{pylib/rsbridge/**,rslib/**,proto/**}"],
-                ":extract:protoc:bin",
+                "$protoc_binary",
                 // declare a dependency on i18n so it gets built first, allowing
                 // things depending on strings.json to build faster, and ensuring
                 // changes to the ftl files trigger a rebuild

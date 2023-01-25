@@ -48,6 +48,13 @@ fn python_archive(platform: Platform) -> OnlineArchive {
                 sha256: "80370f232fd63d5cb3ff9418121acb87276228b0dafbeee3c57af143aca11f89",
             }
         }
+        // dummy url, build used from PYTHON_BINARY
+        Platform::AndroidAarch64 | Platform::AndroidArm | Platform::Androidi68 | Platform::AndroidX64 => {
+            OnlineArchive {
+                url: "https://github.com/ankitects/python-build-standalone/releases/download/anki-2022-02-18/cpython-3.9.10-aarch64-unknown-linux-gnu-install_only-20220218T1329.tar.gz",
+                sha256: "39070f9b9492dce3085c8c98916940434bb65663e6665b2c87bef86025532c1a",
+            }
+        }
     }
 }
 
@@ -173,7 +180,7 @@ impl BuildAction for GenPythonProto {
             })
             .collect();
         build.add_inputs("in", &self.proto_files);
-        build.add_inputs("protoc", inputs![":extract:protoc:bin"]);
+        build.add_inputs("protoc", inputs!["$protoc_binary"]);
         build.add_inputs("protoc-gen-mypy", inputs![":pyenv:protoc-gen-mypy"]);
         build.add_outputs("", python_outputs);
     }
@@ -207,6 +214,10 @@ impl BuildAction for BuildWheel {
                 Platform::MacX64 => "macosx_10_13_x86_64",
                 Platform::MacArm => "macosx_11_0_arm64",
                 Platform::WindowsX64 => "win_amd64",
+                Platform::AndroidAarch64 => "linux_aarch64",
+                Platform::AndroidArm => "linux_arm",
+                Platform::Androidi68 => "linux_i686",
+                Platform::AndroidX64 => "linux_x86_64"
             };
             format!("cp39-abi3-{platform}")
         } else {
