@@ -20,6 +20,7 @@ protobuf!(decks, "decks");
 protobuf!(generic, "generic");
 protobuf!(i18n, "i18n");
 protobuf!(import_export, "import_export");
+protobuf!(image_occlusion, "image_occlusion");
 protobuf!(links, "links");
 protobuf!(media, "media");
 protobuf!(notes, "notes");

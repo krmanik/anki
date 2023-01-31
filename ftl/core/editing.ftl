@@ -68,3 +68,5 @@ editing-close-html-tags = Auto-close HTML tags
 ## You don't need to translate these strings, as they will be replaced with different ones soon.
 
 editing-html-editor = HTML Editor
+
+editing-image-occlusion = Image Occlusion
