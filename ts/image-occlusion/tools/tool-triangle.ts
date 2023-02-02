@@ -1,8 +1,8 @@
 import { fabric } from "fabric";
 import { getQuestionMaskColor, stopDraw } from "./lib";
 
-export const drawCircle = (canvas: any) => {
-    let circle, isDown, origX, origY;
+export const drawTriangle = (canvas: any) => {
+    let triangle, isDown, origX, origY;
 
     stopDraw(canvas);
 
@@ -13,24 +13,26 @@ export const drawCircle = (canvas: any) => {
         origX = pointer.x;
         origY = pointer.y;
 
-        circle = new fabric.Circle({
+        triangle = new fabric.Triangle({
             left: pointer.x,
             top: pointer.y,
-            radius: 0,
             fill: getQuestionMaskColor()!,
+            width: 0,
+            height: 0,
             transparentCorners: false,
             selectable: false,
         });
 
-        canvas.add(circle);
+        canvas.add(triangle);
     });
 
     canvas.on("mouse:move", function (o) {
         if (!isDown) return;
 
         let pointer = canvas.getPointer(o.e);
-        circle.set({
-            radius: Math.abs(origX - pointer.x),
+        triangle.set({
+            width: Math.abs(origX - pointer.x),
+            height: Math.abs(origY - pointer.y),
         });
 
         canvas.renderAll();
@@ -40,10 +42,11 @@ export const drawCircle = (canvas: any) => {
         isDown = false;
 
         let pointer = canvas.getPointer(o.e);
-        let radius = Math.abs(origX - pointer.x);
-        if (radius < 5) {
-            canvas.remove(circle);
+        let width = Math.abs(origX - pointer.x);
+        let height = Math.abs(origY - pointer.y);
+        if (width < 5 || height < 5) {
+            canvas.remove(triangle);
         }
-        circle.setCoords();
+        triangle.setCoords();
     });
 };

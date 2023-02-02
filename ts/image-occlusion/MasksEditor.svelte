@@ -67,8 +67,8 @@
 <style lang="scss">
     .editor-main {
         position: absolute;
-        top: 52px;
-        left: 48px;
+        top: 90px;
+        left: 36px;
         bottom: 2px;
         right: 2px;
         border: 1px solid rgb(96, 141, 225);

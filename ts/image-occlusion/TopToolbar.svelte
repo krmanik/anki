@@ -1,16 +1,17 @@
 <script>
     import IconButton from "../components/IconButton.svelte";
-    import { cursorTools, undoRedoTools, zoomTools } from "./tools/bottom-tools";
+    import { undoRedoTools } from "./tools/tool-undo-redo";
+    import { cursorTools, zoomTools } from "./tools/more-tools";
 
     export let activeTool = "cursor";
     export let canvas;
     export let instance;
 </script>
 
-<div class="bottom-toolbar">
+<div class="top-tool-bar-container">
     {#each undoRedoTools as undoRedoTool}
         <IconButton
-            class="bottom-tool-icon"
+            class="top-tool-icon-button"
             iconSize={110}
             on:click={() => {
                 undoRedoTool.action(canvas);
@@ -23,7 +24,7 @@
     {#if activeTool === "cursor"}
         {#each cursorTools as cursorBottomTool}
             <IconButton
-                class="bottom-tool-icon"
+                class="top-tool-icon-button"
                 iconSize={110}
                 on:click={() => {
                     cursorBottomTool.action(canvas);
@@ -37,7 +38,7 @@
     {#if activeTool === "magnify"}
         {#each zoomTools as zoomBottomTool}
             <IconButton
-                class="bottom-tool-icon"
+                class="top-tool-icon-button"
                 iconSize={110}
                 on:click={() => {
                     zoomBottomTool.action(instance);
@@ -49,20 +50,24 @@
     {/if}
 </div>
 
-<style lang="scss">
-    :global(.bottom-toolbar) {
+<style>
+    .top-tool-bar-container {
         position: fixed;
-        bottom: 0px;
-        left: 46px;
-        z-index: 99;
+        top: 42px;
+        left: 36px;
         width: 100%;
+        border-right: 1px solid #e3e3e3;
+        overflow-y: auto;
+        z-index: 99;
+        background: white;
     }
 
-    :global(.bottom-tool-icon) {
-        border-radius: 100px !important;
-        width: 40px;
-        height: 40px !important;
-        line-height: 1px;
-        margin: 6px;
+    :global(.top-tool-icon-button) {
+        border: unset;
+        display: inline;
+        width: 36px;
+        height: 36px;
+        margin: unset;
+        padding: 8px !important;
     }
 </style>

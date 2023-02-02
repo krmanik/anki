@@ -2,8 +2,6 @@ import {
     mdiCopy,
     mdiDeleteOutline,
     mdiGroup,
-    mdiRedo,
-    mdiUndo,
     mdiZoomIn,
     mdiZoomOut,
     mdiZoomReset,
@@ -16,7 +14,6 @@ import {
     zoomOut,
     zoomReset,
 } from "./lib";
-import { redoAction, undoAction } from "./tool-undo-redo";
 
 export const cursorTools = [
     {
@@ -51,18 +48,5 @@ export const zoomTools = [
         id: 3,
         icon: mdiZoomIn,
         action: zoomIn,
-    },
-];
-
-export const undoRedoTools = [
-    {
-        id: 1,
-        icon: mdiUndo,
-        action: undoAction,
-    },
-    {
-        id: 2,
-        icon: mdiRedo,
-        action: redoAction,
     },
 ];

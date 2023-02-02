@@ -5,6 +5,10 @@ import {
     mdiCircleOutline,
     mdiPalette,
     mdiText,
+    mdiTriangleOutline,
+    mdiEllipseOutline,
+    mdiSquareOutline,
+    mdiFormatColorFill,
 } from "../icons";
 
 export let tools = [
@@ -17,6 +21,14 @@ export let tools = [
         icon: mdiMagnify,
     },
     {
+        id: "draw-triangle",
+        icon: mdiTriangleOutline,
+    },
+    {
+        id: "draw-square",
+        icon: mdiSquareOutline,
+    },
+    {
         id: "draw-rectangle",
         icon: mdiRectangleOutline,
     },
@@ -25,8 +37,16 @@ export let tools = [
         icon: mdiCircleOutline,
     },
     {
+        id: "draw-ellipse",
+        icon: mdiEllipseOutline,
+    },
+    {
         id: "add-text",
         icon: mdiText,
+    },
+    {
+        id: "shape-fill-color",
+        icon: mdiFormatColorFill,
     },
     {
         id: "choose-color",

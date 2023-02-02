@@ -1,8 +1,8 @@
 import { fabric } from "fabric";
 import { getQuestionMaskColor, stopDraw } from "./lib";
 
-export const drawCircle = (canvas: any) => {
-    let circle, isDown, origX, origY;
+export const drawEllipse = (canvas: any) => {
+    let ellipse, isDown, origX, origY;
 
     stopDraw(canvas);
 
@@ -13,24 +13,28 @@ export const drawCircle = (canvas: any) => {
         origX = pointer.x;
         origY = pointer.y;
 
-        circle = new fabric.Circle({
+        ellipse = new fabric.Ellipse({
             left: pointer.x,
             top: pointer.y,
-            radius: 0,
+            rx: 1,
+            ry: 1,
             fill: getQuestionMaskColor()!,
+            originX: "center",
+            originY: "center",
             transparentCorners: false,
             selectable: false,
         });
 
-        canvas.add(circle);
+        canvas.add(ellipse);
     });
 
     canvas.on("mouse:move", function (o) {
         if (!isDown) return;
 
         let pointer = canvas.getPointer(o.e);
-        circle.set({
-            radius: Math.abs(origX - pointer.x),
+        ellipse.set({
+            rx: Math.abs(origX - pointer.x),
+            ry: Math.abs(origY - pointer.y),
         });
 
         canvas.renderAll();
@@ -40,10 +44,11 @@ export const drawCircle = (canvas: any) => {
         isDown = false;
 
         let pointer = canvas.getPointer(o.e);
-        let radius = Math.abs(origX - pointer.x);
-        if (radius < 5) {
-            canvas.remove(circle);
+        let rx = Math.abs(origX - pointer.x);
+        let ry = Math.abs(origY - pointer.y);
+        if (rx < 5 || ry < 5) {
+            canvas.remove(ellipse);
         }
-        circle.setCoords();
+        ellipse.setCoords();
     });
 };

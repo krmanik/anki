@@ -1,3 +1,8 @@
+import {
+    mdiRedo,
+    mdiUndo,
+} from "../icons";
+
 var isRedoing = false;
 var stack: any = [];
 
@@ -23,3 +28,16 @@ export const redoAction = (canvas: any) => {
         canvas.add(stack.pop());
     }
 };
+
+export const undoRedoTools = [
+    {
+        id: 1,
+        icon: mdiUndo,
+        action: undoAction,
+    },
+    {
+        id: 2,
+        icon: mdiRedo,
+        action: redoAction,
+    },
+];

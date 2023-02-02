@@ -114,3 +114,16 @@ const pasteItem = (canvas: any) => {
         canvas.requestRenderAll();
     });
 };
+
+export const fillShapeColor = (canvas: any, color: string) => {
+    let active = canvas.getActiveObject();
+    if (active) {
+        if (active.type === "activeSelection") {
+            active.getObjects().forEach((x) => x.set({ fill: color }));
+            canvas.renderAll();
+        } else {
+            active.set({ fill: color });
+            canvas.renderAll();
+        }
+    }
+};
