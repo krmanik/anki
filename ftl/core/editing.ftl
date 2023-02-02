@@ -69,4 +69,12 @@ editing-close-html-tags = Auto-close HTML tags
 
 editing-html-editor = HTML Editor
 
+## Image Occlusion editing
+
 editing-image-occlusion = Image Occlusion
+editing-masks = Masks
+editing-notes = Notes
+editing-hide-all-guess-one = Hide All, Guess One
+editing-hide-one-guess-one = Hide One, Guess One
+editing-question-mask-color = Question Mask Color
+editing-answer-mask-color = Answer Mask Color

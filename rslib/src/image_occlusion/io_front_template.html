@@ -25,11 +25,9 @@
 
             if (cloze.children.length) {
                 if (cloze.children[0].className == "cloze" && cloze.children[0].innerText == "[prompted]") {
-                    draw(shape, qColor);
-                }
-            } else {
-                if (cloze.innerText.trim() == "hidden") {
                     draw(shape, aColor);
+                } else if (cloze.innerText.trim() == "hidden") {
+                    draw(shape, qColor);
                 }
             }
         }

@@ -12,10 +12,9 @@ impl Collection {
         let mut metadata = ImageClozeMetadata {
             ..Default::default()
         };
-
+        let deck_name = self.get_current_deck().unwrap();
+        metadata.deck_id = deck_name.id.0;
         metadata.data = read(path)?;
-        metadata.deck_id = 1;
-
         Ok(metadata)
     }
 
@@ -38,9 +37,7 @@ impl Collection {
             .to_string();
 
         let mgr = MediaManager::new(&self.media_folder, &self.media_db)?;
-        let mut ctx = mgr.dbctx();
-        let actual_image_name_after_adding =
-            mgr.add_file(&mut ctx, &image_filename, &image_bytes)?;
+        let actual_image_name_after_adding = mgr.add_file(&image_filename, &image_bytes)?;
 
         let image_tag = format!(
             "<img id='img' src='{}'></img>",
@@ -72,8 +69,7 @@ impl Collection {
             Some(nt) => nt,
             None => {
                 self.add_io_notetype(&name)?;
-                self.get_notetype_by_name(&name)?
-                    .ok_or(AnkiError::NotFound { source: todo!() })?
+                self.get_notetype_by_name(&name).unwrap().unwrap()
             }
         };
         if nt.fields.len() < 4 {
@@ -99,7 +95,7 @@ impl Collection {
         let notes_field = self.tr.notetypes_notes_field().to_string();
 
         notetype.set_modified(usn);
-        
+
         notetype.add_field(&occlusion_field);
         notetype.add_field(&header_field);
         notetype.add_field(&image_field);
