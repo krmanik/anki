@@ -6,6 +6,7 @@
         addText,
         drawCircle,
         drawEllipse,
+        drawPolygon,
         drawRectangle,
         drawSquare,
         drawTriangle,
@@ -44,6 +45,9 @@
             case "draw-ellipse":
                 drawEllipse(canvas);
                 break;
+            case "draw-polygon":
+                drawPolygon(canvas, instance);
+                break;                
             case "add-text":
                 addText(canvas);
                 break;

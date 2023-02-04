@@ -10,6 +10,7 @@ export { default as mdiSquareOutline } from "@mdi/svg/svg/square-outline.svg";
 export { default as mdiRectangleOutline } from "@mdi/svg/svg/rectangle-outline.svg";
 export { default as mdiCircleOutline } from "@mdi/svg/svg/circle-outline.svg";
 export { default as mdiEllipseOutline } from "@mdi/svg/svg/ellipse-outline.svg";
+export { default as mdiVectorPolygonVariant } from "@mdi/svg/svg/vector-polygon-variant.svg";
 export { default as mdiDeleteOutline } from "@mdi/svg/svg/delete-outline.svg";
 export { default as mdiPalette } from "@mdi/svg/svg/palette.svg";
 export { default as mdiGroup } from "@mdi/svg/svg/group.svg";

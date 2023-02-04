@@ -9,6 +9,7 @@ import {
     mdiEllipseOutline,
     mdiSquareOutline,
     mdiFormatColorFill,
+    mdiVectorPolygonVariant,
 } from "../icons";
 
 export let tools = [
@@ -39,6 +40,10 @@ export let tools = [
     {
         id: "draw-ellipse",
         icon: mdiEllipseOutline,
+    },
+    {
+        id: "draw-polygon",
+        icon: mdiVectorPolygonVariant,
     },
     {
         id: "add-text",
