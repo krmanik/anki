@@ -19,7 +19,7 @@
     function drawShapes(ctx) {
         var ioCloze = document.getElementById("io_cloze");
         for (cloze of ioCloze.children) {
-            var shape = cloze.dataset.shape;
+            var shape = cloze.dataset.type;
             var qColor = cloze.dataset.fill;
             var aColor = ioCloze.dataset.answerMaskColor;
 
@@ -38,18 +38,49 @@
 
         switch (shape) {
             case "rect":
-                var xywh = cloze.dataset.xywh;
-                xywh = xywh.split(',').map(Number);
-                ctx.fillRect(xywh[0], xywh[1], xywh[2], xywh[3]);
+                ctx.fillRect(cloze.dataset.left, cloze.dataset.top, cloze.dataset.width, cloze.dataset.height);
                 break;
 
             case "ellipse":
-                var xywh = cloze.dataset.xywh;
-                var rx = cloze.dataset.rx;
-                var ry = cloze.dataset.ry;
-                xywh = xywh.split(',').map(Number);
                 ctx.beginPath();
-                ctx.ellipse(xywh[0], xywh[1], rx, ry, 0, 0, Math.PI * 2, false);
+                ctx.ellipse(cloze.dataset.left, cloze.dataset.top, cloze.dataset.rx, cloze.dataset.ry, 0, 0, Math.PI * 2, false);
+                ctx.fill();
+                break;
+
+            case "circle":
+                ctx.beginPath();
+                ctx.arc(cloze.dataset.left, cloze.dataset.top, cloze.dataset.radius, 0, 2 * Math.PI);
+                ctx.fill();
+                break;
+
+            case "triangle":
+                var top = parseFloat(cloze.dataset.top);
+                var left = parseFloat(cloze.dataset.left);
+                var width = parseFloat(cloze.dataset.width);
+                var height = parseFloat(cloze.dataset.height);
+
+                ctx.beginPath();
+                ctx.moveTo(left, top + height);
+                ctx.lineTo(left + width, top + height);
+                ctx.lineTo(left + (width / 2), top);
+                ctx.closePath();
+                ctx.fill();
+                break;
+
+            case "polygon":
+                var polygonPoints = JSON.parse(cloze.dataset.points);
+                var points = [];
+
+                polygonPoints.forEach((point) => {
+                    points.push([point.x, point.y]);
+                });
+
+                ctx.beginPath();
+                ctx.moveTo(points[0][0], points[0][1]);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i][0], points[i][1]);
+                }
+                ctx.closePath();
                 ctx.fill();
                 break;
         }

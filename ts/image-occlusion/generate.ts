@@ -3,6 +3,8 @@ import { getAnswerMaskColor } from "./tools/lib";
 import { noteFieldsData, tagsWritable } from "./store";
 import { get } from "svelte/store";
 
+let divData = ["type", "left", "top", "width", "height", "fill", "stroke", "strokeWidth", "angle", "radius", "startAngle", "endAngle", "rx", "ry", "points"];
+
 export function generate(imagePath: string, generateTye: string, deckId: number): void {
     let canvas = globalThis.canvas;
     let canvasObjects = canvas.getObjects();
@@ -12,17 +14,10 @@ export function generate(imagePath: string, generateTye: string, deckId: number)
 
     canvasObjects.forEach((object, index) => {
         let obJson = object.toJSON();
-
-        switch (obJson.type) {
-            case "rect":
-                clozeDiv += getRectCloze(object, index, generateTye, null);
-                break;
-            case "ellipse":
-                clozeDiv += getEllipseCloze(object, index, generateTye, null);
-                break;
-            case "group":
-                clozeDiv += getGroupCloze(object, index, generateTye);
-                break;
+        if (obJson.type === "group") {
+            clozeDiv += getGroupCloze(object, index, generateTye);
+        } else {
+            clozeDiv += getCloze(object, index, generateTye, null);
         }
     });
 
@@ -32,63 +27,37 @@ export function generate(imagePath: string, generateTye: string, deckId: number)
     saveImageNotes(imagePath, occlusionNotes, deckId);
 }
 
-const getRectCloze = (object, index, generateTye, points) => {
+const getCloze = (object, index, generateTye, relativePos) => {
     let obJson = object.toJSON();
-    let type = obJson.type;
+    let clozeDiv = `<div `;
 
-    let xywh = "";
-    if (points) {
-        xywh += points.left + "," + points.top + ",";
-    } else {
-        xywh += obJson.left + "," + obJson.top + ",";
-    }
+    Object.keys(obJson).forEach(function (key) {
+        if (divData.includes(key)) {
+            if (key === "points") {
+                let points = JSON.stringify(obJson[key]);
+                clozeDiv += `data-${key}='${points}' `;
+            } else if (relativePos && key === "top") {
+                clozeDiv += `data-top="${relativePos.top}" `;
+            } else if (relativePos && key === "left") {
+                clozeDiv += `data-left="${relativePos.left}" `;
+            } else {
+                clozeDiv += `data-${key}="${obJson[key]}" `;
+            }
+        }
+    });
 
-    xywh += obJson.width * obJson.scaleX + "," + obJson.height * obJson.scaleY;
-
-    let clozeDiv = `<div data-shape='${type}' data-xywh='${xywh}' 
-    data-fill='${obJson.fill}'>{{c${index + 1}::${generateTye}::prompted}}</div>\n`;
-
-    return clozeDiv;
-};
-
-const getEllipseCloze = (object, index, generateTye, points) => {
-    let obJson = object.toJSON();
-    let type = obJson.type;
-
-    let xywh = "";
-    if (points) {
-        xywh += points.left + "," + points.top + ",";
-    } else {
-        xywh += obJson.left + "," + obJson.top + ",";
-    }
-
-    xywh += obJson.width * obJson.scaleX + "," + obJson.height * obJson.scaleY;
-    let rx = obJson.rx * obJson.scaleX;
-    let ry = obJson.ry * obJson.scaleY;
-
-    let clozeDiv = `<div data-shape='${type}' data-xywh='${xywh}' 
-    data-rx='${rx}' data-ry='${ry}' data-fill='${obJson.fill}'>
-        {{c${index + 1}::${generateTye}::prompted}}</div>\n`;
-
+    clozeDiv += `>{{c${index + 1}::${generateTye}::prompted}}</div>\n`;
     return clozeDiv;
 };
 
 const getGroupCloze = (group, index, generateTye) => {
     let clozeDiv = "";
+    let objects = group._objects;
 
-    for (let ob of group._objects) {
-        let obJson = ob.toJSON();
-        let points = getObjectPositionInGroup(group, ob);
-
-        switch (obJson.type) {
-            case "rect":
-                clozeDiv += getRectCloze(ob, index, generateTye, points);
-                break;
-            case "ellipse":
-                clozeDiv += getEllipseCloze(ob, index, generateTye, points);
-                break;
-        }
-    }
+    objects.forEach((object, idx) => {
+        let { top, left } = getObjectPositionInGroup(group, object);
+        clozeDiv += getCloze(object, index, generateTye, { top, left });
+    });
 
     return clozeDiv;
 };
