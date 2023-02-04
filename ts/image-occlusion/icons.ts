@@ -14,6 +14,7 @@ export { default as mdiVectorPolygonVariant } from "@mdi/svg/svg/vector-polygon-
 export { default as mdiDeleteOutline } from "@mdi/svg/svg/delete-outline.svg";
 export { default as mdiPalette } from "@mdi/svg/svg/palette.svg";
 export { default as mdiGroup } from "@mdi/svg/svg/group.svg";
+export { default as mdiUngroup } from "@mdi/svg/svg/ungroup.svg";
 export { default as mdiCopy } from "@mdi/svg/svg/content-copy.svg";
 export { default as mdiZoomIn } from "@mdi/svg/svg/magnify-plus-outline.svg";
 export { default as mdiZoomReset } from "@mdi/svg/svg/magnify-expand.svg";

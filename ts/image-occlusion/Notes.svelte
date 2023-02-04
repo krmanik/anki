@@ -19,22 +19,28 @@
 </script>
 
 <Container>
-    <Row --cols={2}>
-        <Col --col-size={1} breakpoint="md">
-            <Container>
-                {#if deckId}
-                    <DeckSelector {deckNameIds} bind:deckId />
-                {/if}
-            </Container>
-        </Col>
+    <Row --cols={1}>
+        <Container>
+            {#if deckId}
+                <DeckSelector {deckNameIds} bind:deckId />
+            {/if}
+        </Container>
     </Row>
     {#each notesFields as field}
         <Container>
-            <div>{field.title}</div>
-            <textarea class="text-area" bind:value={$noteFieldsData[field.id]} />
+            <Row --cols={1}>
+                <Col --col-size={1}>
+                    {field.title}
+                </Col>
+            </Row>
+            <Row --cols={1}>
+                <textarea class="text-area" bind:value={$noteFieldsData[field.id]} />
+            </Row>
         </Container>
     {/each}
-    <Tags bind:globalTags />
+    <Container>
+        <Tags bind:globalTags />
+    </Container>
 </Container>
 
 <style lang="scss">

@@ -45,6 +45,26 @@ export const groupShapes = (canvas: any) => {
     canvas.requestRenderAll();
 };
 
+export const unGroupShapes = (canvas: any) => {
+    if (
+        !canvas.getActiveObject() ||
+        canvas.getActiveObject().type !== "group"
+    ) {
+        return;
+    }
+
+    let group = canvas.getActiveObject();
+    let items = group.getObjects();
+    group._restoreObjectsState();
+    canvas.remove(group);
+
+    items.forEach((item) => {
+        canvas.add(item);
+    })
+
+    canvas.requestRenderAll();
+};
+
 export const getQuestionMaskColor = () => {
     return localStorage.getItem("ques-color")
         ? localStorage.getItem("ques-color")

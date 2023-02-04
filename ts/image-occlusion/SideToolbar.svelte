@@ -18,6 +18,7 @@
     export let canvas;
 
     let activeTool = "cursor";
+    let toolTopPos = 0;
 
     function setActive(toolId) {
         activeTool = toolId;
@@ -47,7 +48,7 @@
                 break;
             case "draw-polygon":
                 drawPolygon(canvas, instance);
-                break;                
+                break;
             case "add-text":
                 addText(canvas);
                 break;
@@ -68,6 +69,7 @@
 
     let colorFillDlgNode: HTMLElement;
     const setFillColorDialog = (node: HTMLElement) => {
+        let box = node.getBoundingClientRect();
         colorFillDlgNode = node;
         colorFillDlgNode.click();
         colorFillDlgNode.addEventListener("input", changeShapeFillColor);
@@ -76,7 +78,6 @@
     const changeShapeFillColor = (node: any) => {
         if (node) {
             fillShapeColor(canvas, node.target.value);
-            console.log(node.target.value);
         }
     };
 </script>
@@ -84,32 +85,35 @@
 <TopToolbar {canvas} {activeTool} {instance} />
 
 <div class="tool-bar-container">
-    <div>
-        {#each tools as tool}
-            <IconButton
-                class="tool-icon-button {activeTool == tool.id ? 'active-tool' : ''}"
-                iconSize={124}
-                active={activeTool === tool.id}
-                on:click={() => {
-                    setActive(tool.id);
-                }}>{@html tool.icon}</IconButton
-            >
-        {/each}
-    </div>
+    {#each tools as tool}
+        <IconButton
+            class="tool-icon-button {activeTool == tool.id ? 'active-tool' : ''}"
+            iconSize={124}
+            active={activeTool === tool.id}
+            on:click={(e) => {
+                setActive(tool.id);
+                // popup position for color dialog
+                toolTopPos = e.pageY - 60;
+            }}>{@html tool.icon}</IconButton
+        >
+    {/each}
 </div>
 
 {#if activeTool === "choose-color"}
-    <ColorDialog />
+    <!-- color dialog for question and answer mask color -->
+    <ColorDialog top={toolTopPos} />
 {/if}
 
 {#if activeTool === "shape-fill-color"}
-    <input
-        type="color"
-        style="opacity:0; position:absolute;"
-        use:setFillColorDialog
-        on:change={changeShapeFillColor}
-        on:keyup={changeShapeFillColor}
-    />
+    <div style="position:fixed; top: {toolTopPos}px">
+        <input
+            type="color"
+            style="display:hidden; position:fixed; left: 40px; top:{toolTopPos}px;"
+            use:setFillColorDialog
+            on:change={changeShapeFillColor}
+            on:keyup={changeShapeFillColor}
+        />
+    </div>
 {/if}
 
 <style>

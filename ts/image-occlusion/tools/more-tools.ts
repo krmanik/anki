@@ -2,6 +2,7 @@ import {
     mdiCopy,
     mdiDeleteOutline,
     mdiGroup,
+    mdiUngroup,
     mdiZoomIn,
     mdiZoomOut,
     mdiZoomReset,
@@ -13,6 +14,7 @@ import {
     zoomIn,
     zoomOut,
     zoomReset,
+    unGroupShapes,
 } from "./lib";
 
 export const cursorTools = [
@@ -28,6 +30,11 @@ export const cursorTools = [
     },
     {
         id: 3,
+        icon: mdiUngroup,
+        action: unGroupShapes,
+    },
+    {
+        id: 4,
         icon: mdiCopy,
         action: duplicateItem,
     },

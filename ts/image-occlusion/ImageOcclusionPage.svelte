@@ -64,12 +64,6 @@ License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
             min-height: 2.5em;
             align-items: center;
         }
-
-        :global(.col) {
-            // cols have negative margins by default
-            --bs-gutter-x: 0;
-            padding: unset !important;
-        }
     }
     ul {
         display: flex;
