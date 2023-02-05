@@ -76,9 +76,19 @@ const saveImageNotes = async function (
     deckId: number,
 ) {
     const fieldsData = get(noteFieldsData);
-    const header = fieldsData["header"];
-    const notes = fieldsData["notes"];
     const tags = get(tagsWritable);
+    let header = fieldsData["header"];
+    let notes = fieldsData["notes"];
+
+    if (header === undefined) {
+        const textArea = document.getElementById("img-occ-html-header")! as HTMLTextAreaElement;
+        header = textArea.value;
+    }
+
+    if (notes === undefined) {
+        const textArea = document.getElementById("img-occ-html-notes")! as HTMLTextAreaElement;
+        notes = textArea.value;;
+    }
 
     await addImageOcclusionNotes(imagePath, deckId, occlusions, header, notes, tags);
 };
