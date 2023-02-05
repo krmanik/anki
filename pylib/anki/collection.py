@@ -11,6 +11,7 @@ from anki import (
     config_pb2,
     generic_pb2,
     import_export_pb2,
+    image_occlusion_pb2,
     links_pb2,
     search_pb2,
     stats_pb2,
@@ -39,6 +40,8 @@ ImportCsvRequest = import_export_pb2.ImportCsvRequest
 CsvMetadata = import_export_pb2.CsvMetadata
 DupeResolution = CsvMetadata.DupeResolution
 Delimiter = import_export_pb2.CsvMetadata.Delimiter
+ImageClozeMetadata = image_occlusion_pb2.ImageClozeMetadata
+AddImageOcclusionNotesRequest = image_occlusion_pb2.AddImageOcclusionNotesRequest
 
 import copy
 import os
@@ -454,6 +457,32 @@ class Collection(DeprecatedNamesMixin):
 
     def import_json_string(self, json: str) -> ImportLogWithChanges:
         return self._backend.import_json_string(json)
+
+    # Image Occlusion
+    def get_image_cloze_metadata(self, path: str | None) -> ImageClozeMetadata:
+        request = image_occlusion_pb2.ImageClozeMetadataRequest(path=path)
+        return self._backend.get_image_cloze_metadata(request)
+
+    def add_image_occlusion_notes(
+        self, 
+        image_path: str | None, 
+        deck_id: int | None, 
+        notes_data: bytes | None,
+        occlusions: str | None,
+        header: str | None,
+        notes: str | None,
+        tags: list[str] | None
+    ) -> bool:
+        request = image_occlusion_pb2.AddImageOcclusionNotesRequest(
+            image_path=image_path, 
+            deck_id=deck_id, 
+            notes_data=notes_data,
+            occlusions=occlusions,
+            header=header,
+            notes=notes,
+            tags=tags
+        )
+        return self._backend.add_image_occlusion_notes(request)
 
     # Object helpers
     ##########################################################################
