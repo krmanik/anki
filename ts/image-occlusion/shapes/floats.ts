@@ -5,9 +5,12 @@
  * which when rounded, reproduces identical pixels to input
  * for up to widths/heights of 10kpx.
  */
-export function floatToDisplay(number: number): string {
+export function floatToDisplay(number: number | string): string {
     if (Number.isNaN(number) || number == 0) {
         return ".0000";
+    }
+    if (typeof number === "string") {
+        return parseFloat(number).toFixed(4).replace(/^0+|0+$/g, "");
     }
     return number.toFixed(4).replace(/^0+|0+$/g, "");
 }

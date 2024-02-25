@@ -456,23 +456,6 @@ License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
         if (isImageOcclusion) {
             const occlusionsData = exportShapesToClozeDeletions($hideAllGuessOne);
             fieldStores[ioFields.occlusions].set(occlusionsData.clozes);
-
-            if (!occlusionsData.freedrawSvg) {
-                return;
-            }
-
-            const image_tags = get(fieldStores[ioFields.image]);
-            const regex = /(<img\s+[^>]*src="([^"]+)"[^>]*>)/i;
-            const match = image_tags.match(regex);
-
-            // get image tag from first image in image field
-            if (match && match[1] && match[2]) {
-                const firstImgTag = match[1];
-                const svgPath = `${match[2]}_freedraw.svg`;
-                bridgeCommand(
-                    `ioSaveSvgImage:${firstImgTag}:${svgPath}:${occlusionsData.freedrawSvg}`,
-                );
-            }
         }
     }
 

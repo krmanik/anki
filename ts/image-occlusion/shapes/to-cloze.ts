@@ -8,6 +8,7 @@ import { cloneDeep } from "lodash-es";
 import type { Size } from "../types";
 import type { Shape, ShapeOrShapes } from "./base";
 import { Ellipse } from "./ellipse";
+import { Path } from "./path";
 import { Polygon } from "./polygon";
 import { Rectangle } from "./rectangle";
 import { Text } from "./text";
@@ -18,18 +19,23 @@ export function exportShapesToClozeDeletions(occludeInactive: boolean): {
     freedrawSvg: string;
 } {
     const shapes = baseShapesFromFabric();
-    const freedrawSvg = canvasFreeDrawingPathToSvg();
 
     let clozes = "";
+    let annotation = "";
     let index = 0;
     shapes.forEach((shapeOrShapes) => {
-        clozes += shapeOrShapesToCloze(shapeOrShapes, index, occludeInactive);
-        if (!(shapeOrShapes instanceof Text)) {
+        if ((shapeOrShapes instanceof Path)) {
+            annotation += shapeOrShapesToCloze(shapeOrShapes, index, occludeInactive);
+        } else {
+            clozes += shapeOrShapesToCloze(shapeOrShapes, index, occludeInactive);
+        }
+
+        if (!(shapeOrShapes instanceof Text) && !(shapeOrShapes instanceof Path)) {
             index++;
         }
     });
 
-    return { clozes, noteCount: index, freedrawSvg };
+    return { clozes, noteCount: index, freedrawSvg: annotation };
 }
 
 /** Gather all Fabric shapes, and convert them into BaseShapes or
@@ -89,6 +95,9 @@ function fabricObjectToBaseShapeOrShapes(
         case "i-text":
             shape = new Text(cloned);
             break;
+        case "path":
+            shape = new Path(cloned);
+            break;
         case "group":
             return object._objects.map((child) => {
                 return fabricObjectToBaseShapeOrShapes(
@@ -122,6 +131,9 @@ function shapeOrShapesToCloze(
 ): string {
     let text = "";
     function addKeyValue(key: string, value: string) {
+        if (value === undefined) {
+            return;
+        }
         value = value.replace(":", "\\:");
         text += `:${key}=${value}`;
     }
@@ -139,6 +151,8 @@ function shapeOrShapesToCloze(
         type = "polygon";
     } else if (shapeOrShapes instanceof Text) {
         type = "text";
+    }  else if (shapeOrShapes instanceof Path) {
+        type = "path";
     } else {
         throw new Error("Unknown shape type");
     }
@@ -153,7 +167,7 @@ function shapeOrShapesToCloze(
     // Maintain existing ordinal in editing mode
     let ordinal = shapeOrShapes.ordinal;
     if (ordinal === undefined) {
-        if (type === "text") {
+        if (type === "text" || type === "path") {
             ordinal = 0;
         } else {
             ordinal = index + 1;
