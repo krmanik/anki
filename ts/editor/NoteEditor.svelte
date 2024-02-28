@@ -456,6 +456,22 @@ License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
         if (isImageOcclusion) {
             const occlusionsData = exportShapesToClozeDeletions($hideAllGuessOne);
             fieldStores[ioFields.occlusions].set(occlusionsData.clozes);
+
+            if (!occlusionsData.annotation) {
+                return;
+            }
+
+            const image_tags = get(fieldStores[ioFields.image]);
+            const regex = /(<img\s+[^>]*src="([^"]+)"[^>]*>)/i;
+            const match = image_tags.match(regex);
+            // get image tag from first image in image field
+            if (match && match[1] && match[2]) {
+                const imagePath = match[1];
+                const annotationPath = `${match[2]}.annotation`;
+                bridgeCommand(
+                    `ioSaveAnnotation-${imagePath}-${annotationPath}-${occlusionsData.annotation}`,
+                );
+            }
         }
     }
 
@@ -490,6 +506,10 @@ License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
         bridgeCommand(
             `ioImageLoaded:${JSON.stringify(detail.path || detail.noteId?.toString())}`,
         );
+    }
+
+    function saveIOAnnotation(annotation: string) {
+        throw new Error("Function not implemented.");
     }
 
     // Signal editor UI state changes to add-ons

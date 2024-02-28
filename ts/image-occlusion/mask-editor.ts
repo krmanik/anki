@@ -11,7 +11,7 @@ import { get } from "svelte/store";
 import { optimumCssSizeForCanvas } from "./canvas-scale";
 import { notesDataStore, tagsWritable, zoomResetValue } from "./store";
 import Toast from "./Toast.svelte";
-import { addFreedrawToCanvasFromSvgPath, addShapesToCanvasFromCloze } from "./tools/add-from-cloze";
+import { addAnnotationToCanvasFromCloze, addShapesToCanvasFromCloze } from "./tools/add-from-cloze";
 import {
     enableSelectable,
     makeShapeRemainInCanvas,
@@ -89,7 +89,7 @@ export const setupMaskEditorForEdit = async (
 
         setCanvasZoomRatio(canvas, instance);
         addShapesToCanvasFromCloze(canvas, clozeNote.occlusions);
-        addFreedrawToCanvasFromSvgPath(canvas, clozeNote.freedrawSvgPath);
+        addAnnotationToCanvasFromCloze(canvas, clozeNote.annotations);
         enableSelectable(canvas, true);
         addClozeNotesToTextEditor(clozeNote.header, clozeNote.backExtra, clozeNote.tags);
         undoStack.reset();

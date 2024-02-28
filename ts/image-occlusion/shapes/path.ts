@@ -103,13 +103,13 @@ function getStringFromPath(pathCommand: PathCommand[]): string {
 
     pathCommand.forEach(p => {
         if (p[0] == "M") {
-            pathStr += `M ${floatToDisplay(p[1])} ${floatToDisplay(p[2])} `;
+            pathStr += `M${floatToDisplay(p[1])}${floatToDisplay(p[2])} `;
         }
         if (p[0] == "Q") {
-            pathStr += `Q ${floatToDisplay(p[1])} ${floatToDisplay(p[2])} ${floatToDisplay(p[3])} ${floatToDisplay(p[4])} `;
+            pathStr += `Q${floatToDisplay(p[1])}${floatToDisplay(p[2])}${floatToDisplay(p[3])}${floatToDisplay(p[4])} `;
         }
         if (p[0] == "L") {
-            pathStr += `L ${floatToDisplay(p[1])} ${floatToDisplay(p[2])} `;
+            pathStr += `L${floatToDisplay(p[1])}${floatToDisplay(p[2])} `;
         }
     })
     return pathStr;

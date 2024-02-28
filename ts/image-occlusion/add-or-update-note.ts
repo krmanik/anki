@@ -15,7 +15,7 @@ export const addOrUpdateNote = async function(
     mode: IOMode,
     occludeInactive: boolean,
 ): Promise<void> {
-    const { clozes: occlusionCloze, noteCount, freedrawSvg } = exportShapesToClozeDeletions(occludeInactive);
+    const { clozes: occlusionCloze, noteCount, annotation } = exportShapesToClozeDeletions(occludeInactive);
     if (noteCount === 0) {
         return;
     }
@@ -35,7 +35,7 @@ export const addOrUpdateNote = async function(
             header,
             backExtra,
             tags,
-            freedrawSvg,
+            annotation,
         });
         showResult(mode.noteId, result, noteCount);
     } else {
@@ -46,7 +46,7 @@ export const addOrUpdateNote = async function(
             header,
             backExtra,
             tags,
-            freedrawSvg,
+            annotation,
         });
         showResult(null, result, noteCount);
     }

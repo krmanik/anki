@@ -437,7 +437,7 @@ class Collection(DeprecatedNamesMixin):
         header: str,
         back_extra: str,
         tags: list[str],
-        freedraw_svg: str,
+        annotation: str,
     ) -> OpChanges:
         return self._backend.add_image_occlusion_note(
             notetype_id=notetype_id,
@@ -446,7 +446,7 @@ class Collection(DeprecatedNamesMixin):
             header=header,
             back_extra=back_extra,
             tags=tags,
-            freedraw_svg=freedraw_svg,
+            annotation=annotation,
         )
 
     def get_image_occlusion_note(
@@ -461,7 +461,7 @@ class Collection(DeprecatedNamesMixin):
         header: str | None,
         back_extra: str | None,
         tags: list[str] | None,
-        freedraw_svg: str | None,
+        annotation: str | None,
     ) -> OpChanges:
         return self._backend.update_image_occlusion_note(
             note_id=note_id,
@@ -469,7 +469,7 @@ class Collection(DeprecatedNamesMixin):
             header=header,
             back_extra=back_extra,
             tags=tags,
-            freedraw_svg=freedraw_svg,
+            annotation=annotation,
         )
 
     # Object helpers

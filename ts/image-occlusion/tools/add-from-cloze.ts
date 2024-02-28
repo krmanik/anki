@@ -2,7 +2,7 @@
 // License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 
 import type { GetImageOcclusionNoteResponse_ImageOcclusion } from "@tslib/anki/image_occlusion_pb";
-import { fabric } from "fabric";
+import type { fabric } from "fabric";
 import { extractShapesFromClozedField } from "image-occlusion/shapes/from-cloze";
 
 import { addShape, addShapeGroup } from "./from-shapes";
@@ -22,16 +22,17 @@ export const addShapesToCanvasFromCloze = (
     redraw(canvas);
 };
 
-export const addFreedrawToCanvasFromSvgPath = (
+export const addAnnotationToCanvasFromCloze = (
     canvas: fabric.Canvas,
-    freedrawSvgPath: string,
+    annotations: GetImageOcclusionNoteResponse_ImageOcclusion[],
 ): void => {
-    fabric.loadSVGFromURL(freedrawSvgPath, function(objects) {
-        objects.forEach(function(path) {
-            if (path instanceof fabric.Path) {
-                canvas.add(path);
-            }
-        });
-    });
+    console.log("addAnnotationToCanvasFromCloze", annotations);
+    for (const shapeOrShapes of extractShapesFromClozedField(annotations)) {
+        if (Array.isArray(shapeOrShapes)) {
+            addShapeGroup(canvas, shapeOrShapes);
+        } else {
+            addShape(canvas, shapeOrShapes);
+        }
+    }
     redraw(canvas);
 };

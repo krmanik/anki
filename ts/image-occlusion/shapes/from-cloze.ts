@@ -12,6 +12,7 @@ import { Ellipse } from "./ellipse";
 import { Point, Polygon } from "./polygon";
 import { Rectangle } from "./rectangle";
 import { Text } from "./text";
+import { Path } from "./path";
 
 export function extractShapesFromClozedField(
     occlusions: GetImageOcclusionNoteResponse_ImageOcclusion[],
@@ -57,6 +58,7 @@ function extractShapeFromRenderedCloze(cloze: HTMLDivElement): Shape | null {
         && type !== "ellipse"
         && type !== "polygon"
         && type !== "text"
+        && type !== "path"
     ) {
         return null;
     }
@@ -76,10 +78,10 @@ function extractShapeFromRenderedCloze(cloze: HTMLDivElement): Shape | null {
     return buildShape(type, props);
 }
 
-type ShapeType = "rect" | "ellipse" | "polygon" | "text";
+type ShapeType = "rect" | "ellipse" | "polygon" | "text" | "path";
 
 function isValidType(type: string): type is ShapeType {
-    return ["rect", "ellipse", "polygon", "text"].includes(type);
+    return ["rect", "ellipse", "polygon", "text", "path"].includes(type);
 }
 
 function buildShape(type: ShapeType, props: Record<string, any>): Shape {
@@ -122,5 +124,11 @@ function buildShape(type: ShapeType, props: Record<string, any>): Shape {
                 scaleY: parseFloat(props.scale),
             });
         }
+        case "path":
+            props.path = props.path.split(" ").map((point) => {
+                const [command, ...coords] = point.split(".");
+                return [command, ...coords.map((coord) => parseFloat(`.${coord}`))];
+            });
+            return new Path(props);
     }
 }
