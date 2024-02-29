@@ -9,10 +9,10 @@ import type { GetImageOcclusionNoteResponse_ImageOcclusion } from "@tslib/anki/i
 
 import type { Shape, ShapeOrShapes } from "./base";
 import { Ellipse } from "./ellipse";
+import { Path } from "./path";
 import { Point, Polygon } from "./polygon";
 import { Rectangle } from "./rectangle";
 import { Text } from "./text";
-import { Path } from "./path";
 
 export function extractShapesFromClozedField(
     occlusions: GetImageOcclusionNoteResponse_ImageOcclusion[],
@@ -127,8 +127,11 @@ function buildShape(type: ShapeType, props: Record<string, any>): Shape {
         case "path":
             props.path = props.path.split(" ").map((point) => {
                 const [command, ...coords] = point.split(".");
-                return [command, ...coords.map((coord) => parseFloat(`.${coord}`))];
+                return [command, ...coords.map((coord) => parseFloat(`0.${coord}`))];
             });
-            return new Path(props);
+            return new Path({
+                ...props,
+                fill: undefined,
+            });
     }
 }

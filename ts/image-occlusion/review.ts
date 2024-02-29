@@ -5,7 +5,7 @@ import * as tr from "@tslib/ftl";
 
 import { optimumPixelSizeForCanvas } from "./canvas-scale";
 import { Shape } from "./shapes";
-import { Ellipse, extractShapesFromRenderedClozes, Polygon, Rectangle, Text } from "./shapes";
+import { Ellipse, extractShapesFromRenderedClozes, Path, Polygon, Rectangle, Text } from "./shapes";
 import { TEXT_BACKGROUND_COLOR, TEXT_FONT_FAMILY, TEXT_PADDING } from "./tools/lib";
 import type { Size } from "./types";
 
@@ -33,6 +33,7 @@ export const imageOcclusionAPI = {
     Rectangle,
     Shape,
     Text,
+    Path,
 };
 
 interface SetupImageOcclusionOptions {
@@ -210,6 +211,17 @@ function drawShapes(
             strokeWidth: properties.inActiveBorder.width,
         });
     }
+    const pathShapes = extractShapesFromRenderedClozes(".cloze-path");
+    for (const shape of pathShapes) {
+        drawShape({
+            context,
+            size,
+            shape,
+            fill: properties.activeShapeColor,
+            stroke: properties.activeBorder.color,
+            strokeWidth: properties.activeBorder.width,
+        });
+    }
 
     onDidDrawShapes?.({ activeShapes, inactiveShapes, properties }, context);
 }
@@ -232,6 +244,8 @@ function drawShape({
     strokeWidth,
 }: DrawShapeParameters): void {
     shape = shape.toAbsolute(size);
+
+    console.log(shape)
 
     ctx.fillStyle = fill;
     ctx.strokeStyle = stroke;
@@ -295,6 +309,26 @@ function drawShape({
             shape.left / shape.scaleX,
             shape.top / shape.scaleY,
         );
+        ctx.restore();
+    } else if (shape instanceof Path) {
+        ctx.beginPath();
+        for (let i = 0; i < shape.path.length; i++) {
+            const p = shape.path[i];
+            if (p[0] === "M") {
+                ctx.moveTo(p[1], p[2]);
+            } else if (p[0] === "L") {
+                ctx.lineTo(p[1], p[2]);
+            } else if (p[0] === "Q") {
+                ctx.quadraticCurveTo(p[1], p[2], p[3], p[4]);
+            } else if (p[0] === "Z") {
+                ctx.closePath();
+            }
+        }
+        ctx.closePath();
+        ctx.fill();
+        if (strokeWidth) {
+            ctx.stroke();
+        }
         ctx.restore();
     }
 }

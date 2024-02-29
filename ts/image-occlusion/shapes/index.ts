@@ -5,6 +5,7 @@ export type { ShapeOrShapes } from "./base";
 export { Shape } from "./base";
 export { Ellipse } from "./ellipse";
 export { extractShapesFromRenderedClozes } from "./from-cloze";
+export { Path } from "./path";
 export { Polygon } from "./polygon";
 export { Rectangle } from "./rectangle";
 export { Text } from "./text";

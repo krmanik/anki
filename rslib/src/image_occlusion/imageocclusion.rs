@@ -57,7 +57,7 @@ pub fn get_image_cloze_data(text: &str) -> String {
         if !occlusion.shape.is_empty()
             && matches!(
                 occlusion.shape.as_str(),
-                "rect" | "ellipse" | "polygon" | "text"
+                "rect" | "ellipse" | "polygon" | "text" | "path"
             )
         {
             result.push_str(&format!("data-shape=\"{}\" ", occlusion.shape));
@@ -128,6 +128,11 @@ pub fn get_image_cloze_data(text: &str) -> String {
                         result.push_str(&format!("data-scale=\"{}\" ", property.value));
                     }
                 }
+                "path" => {
+                    if !property.value.is_empty() {
+                        result.push_str(&format!("data-path=\"{}\" ", property.value));
+                    }
+                }
                 _ => {}
             }
         }
@@ -163,5 +168,9 @@ fn test_get_image_cloze_data() {
     assert_eq!(
         get_image_cloze_data("text:text=foo\\:bar:left=10"),
         r#"data-shape="text" data-text="foo&#x3A;bar" data-left="10" "#,
+    );
+    assert_eq!(
+        get_image_cloze_data("path:path=M 10 10 L 20 20"),
+        r#"data-shape="path" data-path="M 10 10 L 20 20" "#,
     );
 }

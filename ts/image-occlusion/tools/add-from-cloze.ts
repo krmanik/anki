@@ -26,7 +26,6 @@ export const addAnnotationToCanvasFromCloze = (
     canvas: fabric.Canvas,
     annotations: GetImageOcclusionNoteResponse_ImageOcclusion[],
 ): void => {
-    console.log("addAnnotationToCanvasFromCloze", annotations);
     for (const shapeOrShapes of extractShapesFromClozedField(annotations)) {
         if (Array.isArray(shapeOrShapes)) {
             addShapeGroup(canvas, shapeOrShapes);
