@@ -131,7 +131,8 @@ function shapeOrShapesToCloze(
 ): string {
     let text = "";
     function addKeyValue(key: string, value: string) {
-        if (value === undefined) {
+        console.log(key, value);
+        if (value === undefined || value === null) {
             return;
         }
         value = value.replace(":", "\\:");
