@@ -83,22 +83,24 @@ License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
                 dbclicked = true;
             }
         });
-        window.addEventListener("keyup", (event) => {
+        window.addEventListener("keydown", (event) => {
             if (event.key === controlKey) {
                 clicked = false;
                 move = false;
                 wheel = false;
                 dbclicked = false;
-            }
-        });
-        window.addEventListener("keydown", (event) => {
-            if (event.key === controlKey) {
+
                 stopDraw(canvas);
                 enableZoom(canvas);
             }
         });
         window.addEventListener("keyup", (event) => {
             if (event.key === controlKey) {
+                clicked = false;
+                move = false;
+                wheel = false;
+                dbclicked = false;
+
                 disableFunctions();
                 handleToolChanges(activeTool);
             }
